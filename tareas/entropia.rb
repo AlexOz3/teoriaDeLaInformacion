@@ -1,12 +1,35 @@
-#Cuantos eventos estan participando
-#cambiar mensajes de entrada
-#que no acepte caracteres, ni numeros, ni negativos, solo fracciones y decimales
+# ? Cuantos eventos estan participando
+# ? cambiar mensajes de entrada
+# x que no acepte caracteres, ni numeros, ni negativos, solo fracciones y decimales
 
 require 'awesome_print'
 
 
-puts "Ingrese los datos separados por comas"
-array = gets.chomp.split(",").map{|x| x.to_r.to_f }
+while true
+    puts "=" * 30
+    puts "Ingrese los datos separados por comas"
+    array = gets.chomp.split(",").map{|x| x.to_r }
+    
+    datosAceptables = true
+    datosAceptables = !array.empty?
+
+    array.each do |arr|
+        if arr <= 0 || arr % 1 == 0
+            datosAceptables = false
+        end
+    end
+
+    if datosAceptables        
+        break
+    else
+        puts "DATOS INCORRECTOS"
+        puts ""
+    end
+end
+
+array = array.map{|x| x.to_f }
+
+puts "=" * 30
 puts "Ingrese la base"
 base = gets.chomp.to_i
 
@@ -29,6 +52,8 @@ end
 hE *= -1
 
 puts ""
+puts "Datos otorgados #{ array }"
+puts "Base #{ base }"
 puts "Informacion mutua: #{ iE }"
 puts "Entropia: #{hE}"
 

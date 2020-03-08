@@ -1,13 +1,14 @@
-#que no acepte letras ni caracteres que no sean numericos
-# no puede tener enteros, decimales o cero
-# todas las filas de la matriz tienen que ser 1
-# cambiar la entrada de texto A
+# ? que no acepte letras ni caracteres que no sean numericos
+# ? no puede tener enteros, decimales o cero
+# x todas las filas de la matriz tienen que ser 1
+# ? cambiar la entrada de texto A
 
 require 'awesome_print'
 require 'bigdecimal'
 
 rounded = 4
 
+puts "=" * 30
 puts "Ingrese al arreglo A separado por comas"
 a = gets.chomp.split(",").map{|x| x.to_r.to_f } #[0.4, 0.5, 0.1]
 q = []
@@ -18,15 +19,29 @@ q = []
 a.count.times do |i|
     row_q = []
     while true
-        puts "Ingrese la fila #{ i + 1} de la matriz Q separado por comas"
-        row_q = gets.chomp.split(",").map{|x| x.to_r.to_f }
-        if row_q.count == a.count
+
+        puts "=" * 30
+        puts "Ingrese la fila #{ i + 1 } de la matriz Q separado por comas"
+        row_q = gets.chomp.split(",").map{|x| x.to_r }
+        sumatoria = row_q.inject{|sum, x| sum + x}
+        if row_q.count == a.count && sumatoria == 1
             break
         else
-            puts "La longitud de la lista tiene que ser igual a la longitud de al arreglo A"
+
+            if sumatoria != 1
+                puts "La sumatoria de la fila de la matriz debe ser igual a 1"
+            end
+
+            if row_q.count != a.count
+                puts "La longitud de la lista tiene que ser igual a la longitud de al arreglo A"
+            end
+            
             puts ""
         end
     end
+
+    row_q = row_q.map{|x| x.to_f }
+
     q.push( row_q )
 end
 
