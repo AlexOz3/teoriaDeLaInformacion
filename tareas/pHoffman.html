@@ -13,6 +13,13 @@
         -moz-box-sizing: border-box;
       }
 
+      input[type="file"] {
+        width: 100%; 
+        box-sizing: border-box;
+        -webkit-box-sizing:border-box;
+        -moz-box-sizing: border-box;
+      }
+
       .google-visualization-orgchart-linenode {
         border: 0;
       }
@@ -180,6 +187,14 @@
       spaceValidator = "[space]"
     }
 
+    if ( valueNodo.isLetra && spaceValidator == "\n" ) {
+      spaceValidator = "[newLine]"
+    }
+
+    if ( valueNodo.isLetra && spaceValidator == "\r" ) {
+      spaceValidator = "[endLine]"
+    }
+
     var nameNodo = keyNodo + ( "<br>" + spaceValidator )
     grafica.push([nameNodo, nameNodoPadre])
     //Ultimo nodo
@@ -246,21 +261,43 @@
       originalBytes.push(texto.charCodeAt(i).toString(2));
     }
     
+    if ( letras ) {
+      texto = texto.split("")
+    }else{
+      texto = texto.split("")
+      var newText = []
+      var auxText = []
+      for( var i = 0; i < texto.length; i++ ){
+        //Aqui hay caracter especial
+        if( texto[i].match(/\W/) != null ){
 
-    var selector = ""
-    if ( palabras ) {
-      selector = " "
+          if( auxText.length > 0 ){
+            newText.push( auxText.join("") )
+            auxText = []
+          }
+
+          newText.push( texto[i] )
+        }else{
+          auxText.push( texto[i] )
+        }
+      }
+
+      if( auxText.length > 0 ){
+        newText.push( auxText.join("") )
+      }
+
+      texto = JSON.parse( JSON.stringify( newText ) )
     }
-
-    texto = texto.split( selector )
 
     var diccionario = {}
     for( var i = 0; i < texto.length; i++){
-      if ( diccionario[ texto[i] ] == undefined ) {
-        diccionario[ texto[i] ] = 0
-      }
+      if( texto[i] != "\r" ){
+        if ( diccionario[ texto[i] ] == undefined ) {
+          diccionario[ texto[i] ] = 0
+        }
 
-      diccionario[ texto[i] ] += 1
+        diccionario[ texto[i] ] += 1
+      }
     }
 
     diccionario = sortProperties( diccionario )
@@ -282,8 +319,8 @@
       }  )
     }
 
-    // console.log( "Prearbol" )
-    // console.log( JSON.parse( JSON.stringify( arrayArbol ) ) )
+    console.log( "Prearbol" )
+    console.log( JSON.parse( JSON.stringify( arrayArbol ) ) )
 
     var auxValueNodo = ""
     while (true){
@@ -365,29 +402,29 @@
 
     // document.getElementById("contadores").innerHTML = diccionario.map(function(x){ return x.join(" - ") }).join("<br>")
     // document.getElementById("valBinarios").innerHTML = traductorHTML
-    document.getElementById("bytesOriginal").innerHTML = textoOrg.length + " bytes"
-    document.getElementById("bytesHoffman").innerHTML = Math.ceil( bytesHoffmanString.length / 8 ) + " bytes"
+    document.getElementById("bytesOriginal").innerHTML = textoOrg.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " bytes"
+    document.getElementById("bytesHoffman").innerHTML = Math.ceil( bytesHoffmanString.length / 8 ).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " bytes"
 
-    // console.log( "Diccionario" )
-    // console.log( diccionario )
+    console.log( "Diccionario" )
+    console.log( diccionario )
 
-    // console.log( "Arbol" )
-    // console.log( arrayArbol )
+    console.log( "Arbol" )
+    console.log( arrayArbol )
 
-    // console.log( "Valores binarios" )
-    // console.log( valores )
+    console.log( "Valores binarios" )
+    console.log( valores )
 
-    // console.log( "Grafica" )
-    // console.log( grafica )
+    console.log( "Grafica" )
+    console.log( grafica )
 
     // console.log( "Texto" )
     // console.log( textoOrg )
 
-    console.log( "Bytes originales" )
-    console.log( originalBytes.join("") )
+    // console.log( "Bytes originales" )
+    // console.log( originalBytes.join("") )
 
-    console.log( "Bytes Hoffman" )
-    console.log( bytesHoffman.join("") )
+    // console.log( "Bytes Hoffman" )
+    // console.log( bytesHoffman.join("") )
 
     //Impresion de la grafica
     var data = new google.visualization.DataTable();
